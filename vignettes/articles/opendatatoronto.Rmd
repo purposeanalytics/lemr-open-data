@@ -1,0 +1,72 @@
+---
+title: "Introduction to opendatatoronto"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE
+)
+```
+
+`opendatatoronto` is an R interface to the [City of Toronto Open Data Portal](https://open.toronto.ca/). The goal of the package is to help read data directly into R without needing to manually download it via the portal. 
+
+In the portal, datasets are called **packages**. You can see a list of available packages by using `list_packages()`. This will show metadata about the package, including what topics (i.e. tags) the package covers, a description of it,  any civic issues it addresses, how many resources there are (and their formats), how often it is is refreshed and when it was last refreshed.
+
+```{r list-packages-example}
+library(opendatatoronto)
+
+packages <- list_packages(limit = 10)
+
+packages
+```
+
+Or, you can search packages by title using `search_packages()`:
+
+```{r}
+apartment_packages <- search_packages("Apartment")
+
+apartment_packages
+```
+
+You can also see metadata for one specific package using `show_package()`:
+
+```{r}
+show_package("996cfe8d-fb35-40ce-b569-698d51fc683b")
+```
+
+Within a package, there are a number of **resources** - e.g. CSV, XSLX, JSON, SHP files, and more. Resources are the actual "data".
+
+For a given package, you can get a list of resources using `list_package_resources()`, either by using a package found via `search_packages()` or `list_packages()`:
+
+```{r list-apartment-building-registration-resources}
+apartment_building_registration_package <- search_packages("Apartment Building Registration")
+
+apartment_building_registration_resources <- apartment_building_registration_package %>%
+  list_package_resources()
+
+apartment_building_registration_resources
+```
+
+or by passing the package's portal URL directly:
+
+```{r list-resources-from-portal}
+list_package_resources("https://open.toronto.ca/dataset/apartment-building-registration/")
+```
+
+Finally (and most usefully!), you can download the resource (i.e., the actual data) directly into R using `get_resource()`:
+
+```{r get-apartment-building-registration}
+apartment_building_registration_data <- apartment_building_registration_resources %>%
+  get_resource()
+
+apartment_building_registration_data
+```
+
+The `opendatatoronto` package can currently handle the download of CSV, XLS/XLSX, XML, JSON, SHP, and GeoJSON resources, as well as ZIP resources that contain multiple files. For more information, see the following vignettes:
+
+* [Retrieving multi-sheet XLS/XLSX resources](multisheet_resources.html)
+* [Retrieving multi-file ZIP resources](multifile_zip_resources.html)
+* [Retrieving multiple resources using `purrr`](multiple_resources_purrr.html)
+* [Working with spatial data from the portal](spatial_data.html)

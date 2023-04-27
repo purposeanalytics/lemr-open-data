@@ -1,0 +1,36 @@
+Package: lemropendata
+Title: Access the LEMR Open Data Portal
+Version: 0.1.5
+Authors@R: 
+    c(person(given = "Sharla",
+             family = "Gelfand",
+             role = c("aut", "cre"),
+             email = "sharla.gelfand@gmail.com"))
+Description: Access data from the "LEMR
+    Open Data Portal" (<https://open.toronto.ca>) directly from R.
+License: MIT + file LICENSE
+Depends: 
+    R (>= 2.10)
+Imports: 
+    ckanr (>= 0.6.0),
+    magrittr,
+    readxl,
+    sf,
+    tibble,
+    xml2,
+    curl
+Suggests: 
+    covr,
+    dplyr,
+    ggiraph,
+    ggplot2,
+    knitr,
+    purrr,
+    tidyr,
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
