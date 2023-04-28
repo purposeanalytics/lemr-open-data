@@ -15,9 +15,9 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 ```
-# opendatatoronto
+# lemropendata
 
-`lemropendata` is an R interface to the [LEMR Open Data Portal](https://open.toronto.ca/). The goal of the package is to help read data directly into R without needing to manually download it via the portal.
+`lemropendata` is an R interface to the [LEMR Open Data Portal](http://20.220.163.227). The goal of the package is to help read data directly into R without needing to manually download it via the portal.
 
 ## Installation
 
