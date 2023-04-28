@@ -8,15 +8,15 @@ as_id <- function(x) {
       x <- check_id_in_df(x, object_name)
       as.character(x[["id"]])
     } else {
-      stop(paste0("`", object_name, "` must be a 1 row data frame or a length 1 character vector."),
+      stop(glue::glue("`{object_name}` must be a 1 row data frame or a length 1 character vector."),
         call. = FALSE
       )
     }
   } else if (!(is.vector(x) && length(x) == 1 && is.character(x))) {
-    stop(paste0("`", object_name, "` must be a 1 row data frame or a length 1 character vector."),
+    stop(glue::glue("`{object_name}` must be a 1 row data frame or a length 1 character vector."),
       call. = FALSE
     )
-  } else if (grepl("open.toronto.ca/dataset/", x)) {
+  } else if (grepl(glue::glue("{lemr_ckan_url}/dataset/"), x)) {
     package_id_from_url(x)
   } else {
     x
@@ -25,7 +25,7 @@ as_id <- function(x) {
 
 check_id_in_df <- function(x, name) {
   if (!("id" %in% names(x))) {
-    stop(paste0("`", name, '` must contain a column "id".'),
+    stop(gle::glue('`{name}` must contain a column "id".'),
       call. = FALSE
     )
   } else {
@@ -35,7 +35,7 @@ check_id_in_df <- function(x, name) {
 
 check_found <- function(res, id, name) {
   if (inherits(res, "try-error") && (grepl("404", res) || grepl("403", res))) {
-    stop(paste0("`", name, '` "', id, '" was not found.'),
+    stop(glue::glue("`{name}` id was not found."),
       call. = FALSE
     )
   } else {
@@ -44,8 +44,8 @@ check_found <- function(res, id, name) {
 }
 
 package_id_from_url <- function(package_url) {
-  if (!grepl("^open.toronto.ca/dataset/|^https://open.toronto.ca/dataset|^http://open.toronto.ca/dataset", package_url)) {
-    stop("Package URL must start with open.toronto.ca/dataset/",
+  if (!grepl(glue::glue("^{lemr_ckan_url}/dataset/"), package_url)) {
+    stop(glue::glue("Package URL must start with {lemr_ckan_url}/dataset/"),
       call. = FALSE
     )
   }
@@ -102,7 +102,7 @@ check_limit <- function(limit) {
 
 check_internet <- function() {
   if (!curl::has_internet()) {
-    stop("`opendatatoronto` does not work offline. Please check your internet connection.",
+    stop("`lemropendata` does not work offline. Please check your internet connection.",
       call. = FALSE
     )
   }

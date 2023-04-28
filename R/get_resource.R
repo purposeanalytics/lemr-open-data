@@ -11,7 +11,8 @@
 #'
 #' @examples
 #' \donttest{
-#' list_package_resources("https://open.toronto.ca/dataset/neighbourhoods/") %>%
+#' search_packages("Toronto Apartment Building Registry") %>%
+#'   list_package_resources() %>%
 #'   head(1) %>%
 #'   get_resource()
 #' }

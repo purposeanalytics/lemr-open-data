@@ -18,8 +18,9 @@ Download a resource from the portal directly into your R session. CSV, XLS, XLSX
 }
 \examples{
 \donttest{
-list_package_resources("https://open.toronto.ca/dataset/neighbourhoods/") \%>\%
-head(1) \%>\%
-get_resource()
+search_packages("Toronto Apartment Building Registry") \%>\%
+  list_package_resources() \%>\%
+  head(1) \%>\%
+  get_resource()
 }
 }

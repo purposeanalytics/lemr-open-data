@@ -9,18 +9,12 @@ browse_package(package)
 \arguments{
 \item{package}{A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.}
 }
-\value{
-A browser is opened to the package's page  on the City of Toronto Open
-Data Portal website if the session is interactive. The URL is returned as a character
-string.
-}
 \description{
-Opens a browser to the package's page on the City of Toronto Open Data Portal.
+Opens a browser to the package's page on the LEMR Open Data Portal
 }
 \examples{
 \donttest{
-ttc_subway_delays <- search_packages("ttc subway delay")
-browse_package(ttc_subway_delays)
-browse_package("https://open.toronto.ca/dataset/business-improvement-areas/")
+toronto_registry <- search_packages("Toronto Apartment Building Registry")
+browse_package(toronto_registry)
 }
 }
