@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,39 +15,16 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 ```
-# opendatatoronto <img src="man/figures/logo.png" align="right" height="139" />
+# opendatatoronto
 
-<!-- badges: start -->
-[![R build status](https://github.com/sharlagelfand/opendatatoronto/workflows/R-CMD-check/badge.svg)](https://github.com/sharlagelfand/opendatatoronto/actions)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/sharlagelfand/opendatatoronto?branch=main&svg=true)](https://ci.appveyor.com/project/sharlagelfand/opendatatoronto)
-[![Codecov test coverage](https://codecov.io/gh/sharlagelfand/opendatatoronto/branch/main/graph/badge.svg)](https://app.codecov.io/gh/sharlagelfand/opendatatoronto?branch=main)
-[![CRAN status](https://www.r-pkg.org/badges/version/opendatatoronto)](https://cran.r-project.org/package=opendatatoronto)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/opendatatoronto?color=blue)](https://r-pkg.org/pkg/opendatatoronto)
-<!-- badges: end -->
-
-`opendatatoronto` is an R interface to the [City of Toronto Open Data Portal](https://open.toronto.ca/). The goal of the package is to help read data directly into R without needing to manually download it via the portal. 
-
-For more information, please visit the [package website](https://sharlagelfand.github.io/opendatatoronto/) and vignettes:
-
-* [Introduction to `opendatatoronto`](https://sharlagelfand.github.io/opendatatoronto/articles/opendatatoronto.html)
-* [Retrieving multi-sheet XLS/XLSX resources](https://sharlagelfand.github.io/opendatatoronto/articles/articles/multisheet_resources.html)
-* [Retrieving multi-file ZIP resources](https://sharlagelfand.github.io/opendatatoronto/articles/articles/multifile_zip_resources.html)
-* [Retrieving multiple resources using `purrr`](https://sharlagelfand.github.io/opendatatoronto/articles/articles/multiple_resources_purrr.html)
-* [Working with spatial data from the portal](https://sharlagelfand.github.io/opendatatoronto/articles/articles/spatial_data.html)
+`lemropendata` is an R interface to the [LEMR Open Data Portal](https://open.toronto.ca/). The goal of the package is to help read data directly into R without needing to manually download it via the portal.
 
 ## Installation
 
-You can intall the released version of opendatatoronto from CRAN:
-
-```r
-install.packages("opendatatoronto")
-```
-
-or the development version from GitHub with:
+You can install the development version from GitHub with:
 
 ``` r
-devtools::install_github("sharlagelfand/opendatatoronto", ref = "main")
+devtools::install_github("purposeanalyrics/lemr-open-data")
 ```
 
 ## Usage
@@ -53,50 +32,38 @@ devtools::install_github("sharlagelfand/opendatatoronto", ref = "main")
 In the Portal, datasets are called **packages**. You can see a list of available packages by using `list_packages()`. This will show metadata about the package, including what topics (i.e. tags) the package covers, any civic issues it addresses, a description of it, how many resources there are (and their formats), how often it is is refreshed and when it was last refreshed.
 
 ```{r list-packages-example}
-library(opendatatoronto)
-packages <- list_packages(limit = 10)
+library(lemropendata)
+packages <- list_packages()
 packages
 ```
 
 You can also search packages by title:
 
 ```{r search-packages-example}
-ttc_packages <- search_packages("ttc")
+to_building_registry_package <- search_packages("Toronto Apartment Building Registry")
 
-ttc_packages
-```
-
-Or see metadata for a specific package:
-
-```{r show-packages-example}
-show_package("996cfe8d-fb35-40ce-b569-698d51fc683b")
+to_building_registry_package
 ```
 
 Within a package, there are a number of **resources** - e.g. CSV, XSLX, JSON, SHP files, and more. Resources are the actual "data".
 
-For a given package, you can get a list of resources using `list_package_resources()`. You can pass it the package id (which is contained in `marriage_license_packages` below):
+For a given package, you can get a list of resources using `list_package_resources()`. You can pass it the package:
 
 ```{r list-marriage-license-resources}
-marriage_licence_packages <- search_packages("Marriage Licence Statistics")
-
-marriage_licence_resources <- marriage_licence_packages %>%
+to_building_registry_resources <- to_building_registry_package %>%
   list_package_resources()
 
-marriage_licence_resources
-```
-
-But you can also get a list of resources by using the package's URL from the Portal:
-
-```{r list-resources-url}
-list_package_resources("https://open.toronto.ca/dataset/sexual-health-clinic-locations-hours-and-services/")
+to_building_registry_resources
 ```
 
 Finally (and most usefully!), you can download the resource (i.e., the actual data) directly into R using `get_resource()`:
 
 ```{r get-marriage-licenses}
-marriage_licence_statistics <- marriage_licence_resources %>%
-  head(1) %>%
+library(dplyr)
+
+to_building_registry_zone <- to_building_registry_resources %>%
+  filter(name == "toronto_apartment_building_registry-zone.csv") %>%
   get_resource()
 
-marriage_licence_statistics
+to_building_registry_zone
 ```
