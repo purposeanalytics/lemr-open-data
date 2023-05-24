@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 You can install the development version from GitHub with:
 
 ``` r
-devtools::install_github("purposeanalyrics/lemr-open-data")
+devtools::install_github("purposeanalytics/lemr-open-data")
 ```
 
 ## Usage

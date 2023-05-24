@@ -13,14 +13,14 @@ portal.
 You can install the development version from GitHub with:
 
 ``` r
-devtools::install_github("purposeanalyrics/lemr-open-data")
+devtools::install_github("purposeanalytics/lemr-open-data")
 ```
 
 ## Usage
 
 In the Portal, datasets are called **packages**. You can see a list of
 available packages by using `list_packages()`. This will show metadata
-about the package, including what topics (i.e. tags) the package covers,
+about the package, including what topics (i.e. tags) the package covers,
 any civic issues it addresses, a description of it, how many resources
 there are (and their formats), how often it is is refreshed and when it
 was last refreshed.
