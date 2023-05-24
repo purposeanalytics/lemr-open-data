@@ -89,15 +89,7 @@ show_package <- function(package) {
 package_res_init <- tibble::tibble(
   title = character(),
   id = character(),
-  topics = character(),
-  civic_issues = character(),
-  owner_division = character(),
-  excerpt = character(),
-  dataset_category = character(),
-  num_resources = integer(),
-  formats = character(),
-  refresh_rate = character(),
-  last_refreshed = as.Date(character())
+  num_resources = integer()
 )
 
 package_cols <- names(package_res_init)
