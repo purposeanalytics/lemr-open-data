@@ -3,22 +3,26 @@
 \name{set_token}
 \alias{set_token}
 \alias{get_token}
-\title{Get or set LEMR Open Data token}
+\title{Get or set LEMR Open Data Portal token}
 \usage{
-set_token(token, var = "LEMROPENDATA_KEY")
+set_token(scope = c("project", "user"), var = "LEMROPENDATA_KEY")
 
 get_token(var = "LEMROPENDATA_KEY")
 }
 \arguments{
-\item{token}{LEMR Open Data token}
+\item{scope}{Edit globally for the current user, or locally for the current project}
 
-\item{var}{Environment to store token in, defaults to \code{LEMROPENDATA_KEY}}
+\item{var}{Environment variable to store token in, defaults to \code{LEMROPENDATA_KEY}}
 }
 \description{
-Get or set LEMR Open Data token
+Get or set a token for reading private data from the LEMR Open Data Portal. Running \code{set_token()} will open your .Renviron file, with a message to set `LEMROPENDATA_KEY` with the token. Once R is restarted, \code{get_token()} will read the token from the file.
 }
 \examples{
-set_token("test")
+set_token()
+• Modify '.Renviron'
+• Restart R for changes to take effect
+ℹ Set LEMROPENDATA_KEY to LEMR Open Data token in the opened .Renviron
+
 get_token()
 # [1] "test"
 }

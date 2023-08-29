@@ -4,7 +4,7 @@
 \alias{list_packages}
 \title{List packages}
 \usage{
-list_packages(limit = 50)
+list_packages(limit = 50, token = get_token())
 }
 \arguments{
 \item{limit}{The maximum number of packages to return. The default is 50.}

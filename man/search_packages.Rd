@@ -4,7 +4,7 @@
 \alias{search_packages}
 \title{Search packages by title}
 \usage{
-search_packages(title, limit = 50)
+search_packages(title, limit = 50, token = get_token())
 }
 \arguments{
 \item{title}{Title to search (case-insensitive).}
