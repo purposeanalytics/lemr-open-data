@@ -24,7 +24,7 @@ list_packages <- function(limit = 50, token = get_token()) {
     key = token
   )
 
-  complete_package_res(as.list(packages))
+  complete_package_res(packages)
 }
 
 #' Search packages by title
@@ -54,10 +54,9 @@ search_packages <- function(title, limit = 50, token = get_token()) {
   )
 
   if (length(packages[["results"]]) == 0) {
-    names(package_res_init)[which(names(package_res_init) == "owner_division")] <- "publisher"
     package_res_init
   } else {
-    complete_package_res(as.list(packages[["results"]]))
+    complete_package_res(packages[["results"]])
   }
 }
 
@@ -105,19 +104,10 @@ package_res_init <- tibble::tibble(
 package_cols <- names(package_res_init)
 
 complete_package_res <- function(res) {
-  res <- res[names(res) %in% package_cols]
-  for (i in package_cols) {
-    if (is.null(res[[i]])) {
-      res[[i]] <- NA
-    }
-    col_class <- class(package_res_init[[i]])
-    if (col_class == "Date") {
-      res[[i]] <- as.Date(res[[i]])
-    } else {
-      class(res[[i]]) <- col_class
-    }
-  }
-  res_cols <- tibble::as_tibble(res[package_cols])
+  res <- res[, package_cols]
 
-  res_cols
+  # Turn tags into a string
+  res[["tags"]] <- purrr::map_chr(res[["tags"]], ~ paste0(.x[["display_name"]], collapse = "; "))
+
+  dplyr::as_tibble(res)
 }
