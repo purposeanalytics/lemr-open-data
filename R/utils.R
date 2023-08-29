@@ -43,7 +43,7 @@ check_found <- function(res, id, name) {
   }
 }
 
-package_id_from_url <- function(package_url) {
+package_id_from_url <- function(package_url, token = get_token()) {
   if (!grepl(glue::glue("^{lemr_ckan_url}/dataset/"), package_url)) {
     stop(glue::glue("Package URL must start with {lemr_ckan_url}/dataset/"),
       call. = FALSE
@@ -51,7 +51,7 @@ package_id_from_url <- function(package_url) {
   }
 
   package_title <- basename(package_url)
-  search_package_title <- search_packages(package_title)
+  search_package_title <- search_packages(package_title, token = token)
 
   if (nrow(search_package_title) == 0) {
     stop(paste0("No package id found matching the URL '", package_url, "'."),

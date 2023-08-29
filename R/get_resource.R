@@ -16,14 +16,15 @@
 #'   head(1) %>%
 #'   get_resource()
 #' }
-get_resource <- function(resource) {
+get_resource <- function(resource, token = get_token()) {
   check_internet()
   resource_id <- as_id(resource)
 
   resource_res <- try(
     ckanr::resource_show(resource_id,
       url = lemr_ckan_url,
-      as = "list"
+      as = "list",
+      key = token
     ),
     silent = TRUE
   )
@@ -32,73 +33,55 @@ get_resource <- function(resource) {
 
   format <- check_format(resource_res[["format"]])
 
-  # if (resource_res[["datastore_active"]]) {
-  #   res <- get_datastore_resource(resource_id)
-  #   res <- check_geometry_resource(res, format)
-  # } else {
-  res <- ckanr::ckan_fetch(
-    x = resource_res[["url"]],
-    store = "session",
-    format = format
-  )
-  # }
+  if (tolower(format) == "rds") {
+    temp <- tempfile(fileext = ".rds")
+    ckanr::ckan_fetch(
+      x = resource_res[["url"]],
+      store = "disk",
+      path = temp,
+      format = format,
+      key = token
+    )
+    res <- readRDS(temp)
 
-  if (inherits(res, "sf")) {
-    res_crs <- sf::st_crs(res)
-    res <- tibble::as_tibble(res)
-    sf::st_as_sf(res)
-  } else if (is.data.frame(res)) {
-    tibble::as_tibble(res, .name_repair = "minimal")
+    if (all(c("Longitude", "Latitude") %in% names(res))) {
+      res %>%
+        sf::st_as_sf(coords = c("Longitude", "Latitude"), remove = FALSE) %>%
+        sf::st_set_crs(4326)
+    } else {
+      res
+    }
   } else {
-    res <- nested_lapply_tibble(res)
-    names(res) <- names(res)
-    res
+    res <- ckanr::ckan_fetch(
+      x = resource_res[["url"]],
+      store = "session",
+      format = format,
+      key = token
+    )
+
+    if (inherits(res, "sf")) {
+      res_crs <- sf::st_crs(res)
+      res <- tibble::as_tibble(res)
+      sf::st_as_sf(res)
+    } else if (is.data.frame(res)) {
+      tibble::as_tibble(res, .name_repair = "minimal")
+    } else {
+      res <- nested_lapply_tibble(res)
+      names(res) <- names(res)
+      res
+    }
   }
 }
 
 check_format <- function(format) {
   format <- toupper(format)
-  if (!(format %in% c("CSV", "XLS", "XLSX", "XML", "JSON", "SHP", "ZIP", "GEOJSON"))) {
-    stop(paste(format, "`format` can't be downloaded via package; please visit Open Data Portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON."),
+  if (!(format %in% c("CSV", "XLS", "XLSX", "XML", "JSON", "SHP", "ZIP", "GEOJSON", "RDS"))) {
+    stop(paste(format, "`format` can't be downloaded via package; please visit Open Data Portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON, RDS."),
       call. = FALSE
     )
   } else {
     format
   }
-}
-
-get_datastore_resource <- function(resource_id) {
-  check_internet()
-  initial_res <- ckanr::ds_search(
-    resource_id = resource_id,
-    url = lemr_ckan_url,
-    limit = 0,
-    as = "table"
-  )
-
-  n_records <- initial_res[["total"]]
-
-  res <- ckanr::ds_search(
-    resource_id = resource_id,
-    url = lemr_ckan_url,
-    limit = n_records,
-    as = "table"
-  )
-
-  res[["records"]]
-}
-
-check_geometry_resource <- function(res, format) {
-  if (tolower(format) == "geojson") {
-    res <- covert_geometry_resource(res)
-  } else {
-    res
-  }
-}
-
-covert_geometry_resource <- function(res) {
-  res[["geometry"]] <- sf::st_as_sfc(res[["geometry"]], GeoJSON = TRUE, crs = 4326)
-  sf::st_as_sf(tibble::as_tibble(res), sf_column_name = "geometry", crs = 4326)
 }
 
 tibble_list_elements <- function(x) {

@@ -13,14 +13,15 @@
 #' \donttest{
 #' list_packages(5)
 #' }
-list_packages <- function(limit = 50) {
+list_packages <- function(limit = 50, token = get_token()) {
   check_internet()
   limit <- check_limit(limit)
 
   packages <- ckanr::package_list_current(
     limit = limit,
     url = lemr_ckan_url,
-    as = "table"
+    as = "table",
+    key = token
   )
 
   complete_package_res(as.list(packages))
@@ -41,13 +42,15 @@ list_packages <- function(limit = 50) {
 #' \donttest{
 #' search_packages("ttc")
 #' }
-search_packages <- function(title, limit = 50) {
+search_packages <- function(title, limit = 50, token = get_token()) {
+  # TODO not working
   check_internet()
   packages <- ckanr::package_search(
     fq = paste0("title:", '"', title, '"'),
     rows = limit,
     url = lemr_ckan_url,
-    as = "table"
+    as = "table",
+    key = token
   )
 
   if (length(packages[["results"]]) == 0) {
@@ -74,6 +77,7 @@ search_packages <- function(title, limit = 50) {
 #' }
 show_package <- function(package) {
   check_internet()
+  # TODO not working
   package_id <- as_id(package)
 
   package_res <- try(
@@ -89,7 +93,13 @@ show_package <- function(package) {
 package_res_init <- tibble::tibble(
   title = character(),
   id = character(),
-  num_resources = integer()
+  num_resources = integer(),
+  state = character(),
+  isopen = integer(),
+  license_title = character(),
+  notes = character(),
+  version = character(),
+  tags = character()
 )
 
 package_cols <- names(package_res_init)
@@ -108,8 +118,6 @@ complete_package_res <- function(res) {
     }
   }
   res_cols <- tibble::as_tibble(res[package_cols])
-
-  names(res_cols)[which(names(res_cols) == "owner_division")] <- "publisher"
 
   res_cols
 }
