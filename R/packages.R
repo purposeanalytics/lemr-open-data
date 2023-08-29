@@ -4,14 +4,15 @@
 #'
 #'
 #' @param limit The maximum number of packages to return. The default is 50.
+#' @param token An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.
 #'
 #' @export
 #'
-#' @return A tibble of available packages and metadata, including \code{title}, \code{id}, \code{topics}, \code{civic_issues}, \code{excerpt}, \code{publisher}, \code{dataset_category}, \code{num_resources} (the number of resources in the package), \code{formats} (the different formats of the resources), \code{refresh_rate} (how often the package is refreshed), and \code{last_refreshed} (the date it was last refreshed).
+#' @return A tibble of available packages and metadata, including \code{title}, \code{id}, \code{num_resources} (the number of resources in the package), \code{state}, \code{isopen}, \code{license_title}, \code{notes}, \code{version}, and \code{tags}.
 #'
 #' @examples
 #' \donttest{
-#' list_packages(5)
+#' list_packages()
 #' }
 list_packages <- function(limit = 50, token = get_token()) {
   check_internet()
@@ -33,6 +34,7 @@ list_packages <- function(limit = 50, token = get_token()) {
 #'
 #' @param title Title to search (case-insensitive).
 #' @param limit Maximum number of packages to return. The default is 50. The maximum limit is 1000.
+#' @inheritParams list_packages
 #'
 #' @export
 #'

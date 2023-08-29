@@ -10,6 +10,8 @@ search_packages(title, limit = 50, token = get_token())
 \item{title}{Title to search (case-insensitive).}
 
 \item{limit}{Maximum number of packages to return. The default is 50. The maximum limit is 1000.}
+
+\item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
 A tibble of matching packages along with package metadata, including \code{title}, \code{id}, \code{topics}, \code{civic_issues}, \code{excerpt}, \code{publisher}, \code{dataset_category}, \code{num_resources} (the number of resources in the package), \code{formats} (the different formats of the resources), \code{refresh_rate} (how often the package is refreshed), and \code{last_refreshed} (the date it was last refreshed).

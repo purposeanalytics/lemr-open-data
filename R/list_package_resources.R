@@ -3,6 +3,7 @@
 #' List resources for a package on the portal.
 #'
 #' @param package A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.
+#' @inheritParams list_packages
 #'
 #' @export
 #'

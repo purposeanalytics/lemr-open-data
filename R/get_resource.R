@@ -3,6 +3,7 @@
 #' Download a resource from the portal directly into your R session. CSV, XLS, XLSX, XML, JSON, SHP, ZIP, and GeoJSON resources are supported.
 #'
 #' @param resource A way to identify the resource. Either a resource ID (passed as a character vector directly) or a single resource resulting from \code{\link{list_package_resources}}.
+#' @inheritParams list_packages
 #'
 #' @export
 #'
