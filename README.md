@@ -18,39 +18,26 @@ devtools::install_github("purposeanalytics/lemr-open-data")
 
 ## Usage
 
-In the Portal, datasets are called **packages**. You can see a list of
+Much of the data in the portal is private and requires an authentication
+token. You can get this from the portal itself, and set up using
+`set_token()`. Once your token is set up, subsequent functions will
+automatically retrieve and use the token so that you get all data
+available to your user.
+
+In the portal, datasets are called **packages**. You can see a list of
 available packages by using `list_packages()`. This will show metadata
-about the package, including what topics (i.e. tags) the package covers,
-any civic issues it addresses, a description of it, how many resources
-there are (and their formats), how often it is is refreshed and when it
-was last refreshed.
+about the package, including what tags, state, license, notes, version,
+and number of resources.
 
 ``` r
 library(lemropendata)
 packages <- list_packages()
 packages
-#> # A tibble: 3 × 11
-#>   title        id         topics civic_issues publisher excerpt dataset_category
-#>   <chr>        <chr>      <chr>  <chr>        <chr>     <chr>   <chr>           
-#> 1 Winnipeg Bu… a9f0e25f-… <NA>   <NA>         <NA>      <NA>    <NA>            
-#> 2 Toronto Apa… 6b69da01-… <NA>   <NA>         <NA>      <NA>    <NA>            
-#> 3 Test data 1  3cfb4234-… <NA>   <NA>         <NA>      <NA>    <NA>            
-#> # … with 4 more variables: num_resources <int>, formats <chr>,
-#> #   refresh_rate <chr>, last_refreshed <date>
-```
-
-You can also search packages by title:
-
-``` r
-to_building_registry_package <- search_packages("Toronto Apartment Building Registry")
-
-to_building_registry_package
-#> # A tibble: 1 × 11
-#>   title       id          topics civic_issues publisher excerpt dataset_category
-#>   <chr>       <chr>       <chr>  <chr>        <chr>     <chr>   <chr>           
-#> 1 Toronto Ap… 6b69da01-b… <NA>   <NA>         <NA>      <NA>    <NA>            
-#> # … with 4 more variables: num_resources <int>, formats <chr>,
-#> #   refresh_rate <chr>, last_refreshed <date>
+#> # A tibble: 2 × 9
+#>   title       id    num_resources state isopen license_title notes version tags 
+#>   <chr>       <chr>         <int> <chr> <lgl>  <chr>         <chr> <chr>   <chr>
+#> 1 Toronto Ap… f46c…             1 acti… FALSE  ""            ""    ""      poin…
+#> 2 Toronto Ev… d99e…             7 acti… FALSE  "License not… "Acc… "1.0"   evic…
 ```
 
 Within a package, there are a number of **resources** - e.g. CSV, XSLX,
@@ -60,44 +47,47 @@ For a given package, you can get a list of resources using
 `list_package_resources()`. You can pass it the package:
 
 ``` r
-to_building_registry_resources <- to_building_registry_package %>%
+to_app_layers <- packages[packages$title == "Toronto App Layers",] %>%
   list_package_resources()
 
-to_building_registry_resources
-#> # A tibble: 4 × 4
-#>   name                                           id         format last_modified
-#>   <chr>                                          <chr>      <chr>  <date>       
-#> 1 toronto_apartment_building_registry-point.csv  de64426f-… CSV    2023-04-18   
-#> 2 toronto_apartment_building_registry-zone.csv   f42e30de-… CSV    2023-04-18   
-#> 3 toronto_apartment_building_registry-city.csv   eca12407-… CSV    2023-04-18   
-#> 4 toronto_apartment_building_registry-region.csv 6a5b3b70-… CSV    2023-04-18
+to_app_layers
+#> # A tibble: 1 × 4
+#>   name                                      id              format last_modified
+#>   <chr>                                     <chr>           <chr>  <date>       
+#> 1 toronto_points_layers 20230719-202357.rds 6854804a-fab2-… RDS    2023-08-05
 ```
 
 Finally (and most usefully!), you can download the resource (i.e., the
 actual data) directly into R using `get_resource()`:
 
 ``` r
-library(dplyr)
-
-to_building_registry_zone <- to_building_registry_resources %>%
-  filter(name == "toronto_apartment_building_registry-zone.csv") %>%
+to_points_layers <- to_app_layers[to_app_layers$name == "toronto_points_layers 20230719-202357.rds",] %>%
   get_resource()
 
-to_building_registry_zone
-#> # A tibble: 1,049 × 13
-#>     .zone .year CONFIRMED_STOREYS CONFIRMED_UNITS NO_BARRIER_FREE_AC… YEAR_BUILT
-#>     <int> <int>             <int>           <int>               <int>      <int>
-#>  1 227001  2017                 3              10                   0       1989
-#>  2 227001  2017                 3              10                   2       1838
-#>  3 227001  2017                 3              11                   1       1993
-#>  4 227001  2017                 3              12                   0       1910
-#>  5 227001  2017                 3              12                   1       1980
-#>  6 227001  2017                 3              13                   0       1880
-#>  7 227001  2017                 3              15                   0       1911
-#>  8 227001  2017                 3              15                   0       1930
-#>  9 227001  2017                 3              15                   0       1990
-#> 10 227001  2017                 3              16                   0       1888
-#> # … with 1,039 more rows, and 7 more variables: YEAR_REGISTERED <int>,
-#> #   AIR_CONDITIONING_TYPE <chr>, n <int>, .cleaner_class_name <chr>,
-#> #   .data_type <chr>, .folder_path <chr>, .region <chr>
+to_points_layers
+#> Simple feature collection with 30308 features and 11 fields
+#> Geometry type: POINT
+#> Dimension:     XY
+#> Bounding box:  xmin: -123.8915 ymin: -26.21459 xmax: 1.371135 ymax: 53.60252
+#> Geodetic CRS:  WGS 84
+#> # A tibble: 30,308 × 12
+#>    Address  Apartment Building P…¹ Apartment Has Air Co…² Apartment Barrier Fr…³
+#>  * <chr>    <chr>                  <lgl>                                   <dbl>
+#>  1 1 26th … <NA>                   NA                                         NA
+#>  2 1 35th … <NA>                   NA                                         NA
+#>  3 1 41st … <NA>                   NA                                         NA
+#>  4 1 6th S… <NA>                   NA                                         NA
+#>  5 1 Abbot… <NA>                   NA                                         NA
+#>  6 1 Aberf… <NA>                   NA                                         NA
+#>  7 1 Aberf… <NA>                   NA                                         NA
+#>  8 1 Acorn… <NA>                   NA                                         NA
+#>  9 1 Adra … <NA>                   NA                                         NA
+#> 10 1 Adra … <NA>                   NA                                         NA
+#> # ℹ 30,298 more rows
+#> # ℹ abbreviated names: ¹​`Apartment Building Property Type`,
+#> #   ²​`Apartment Has Air Conditioning`,
+#> #   ³​`Apartment Barrier Free Accessible Units`
+#> # ℹ 8 more variables: `Apartment Building Units` <dbl>,
+#> #   `Apartment Year Built` <dbl>, `RentSafeTO Score` <dbl>,
+#> #   `Evicting Organization` <chr>, Latitude <chr>, Longitude <chr>, …
 ```

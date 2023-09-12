@@ -4,10 +4,12 @@
 \alias{list_package_resources}
 \title{List resources for a package}
 \usage{
-list_package_resources(package)
+list_package_resources(package, token = get_token())
 }
 \arguments{
 \item{package}{A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.}
+
+\item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
 A tibble of resources along with metadata, including \code{name},

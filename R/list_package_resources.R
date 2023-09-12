@@ -3,6 +3,7 @@
 #' List resources for a package on the portal.
 #'
 #' @param package A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.
+#' @inheritParams list_packages
 #'
 #' @export
 #'
@@ -15,7 +16,7 @@
 #' list_package_resources("1db34737-ffad-489d-a590-9171d500d453")
 #' list_package_resources("https://open.toronto.ca/dataset/ttc-subway-delay-data")
 #' }
-list_package_resources <- function(package) {
+list_package_resources <- function(package, token = get_token()) {
   check_internet()
   package_id <- as_id(package)
 
@@ -23,7 +24,8 @@ list_package_resources <- function(package) {
     ckanr::package_show(
       id = package_id,
       url = lemr_ckan_url,
-      as = "table"
+      as = "table",
+      key = token
     ),
     silent = TRUE
   )

@@ -4,10 +4,12 @@
 \alias{get_resource}
 \title{Download a resource into your R session}
 \usage{
-get_resource(resource)
+get_resource(resource, token = get_token())
 }
 \arguments{
 \item{resource}{A way to identify the resource. Either a resource ID (passed as a character vector directly) or a single resource resulting from \code{\link{list_package_resources}}.}
+
+\item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
 In most cases, the resource is returned as a tibble or list of tibbles.
