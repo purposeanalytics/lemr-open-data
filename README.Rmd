@@ -29,7 +29,9 @@ devtools::install_github("purposeanalytics/lemr-open-data")
 
 ## Usage
 
-In the Portal, datasets are called **packages**. You can see a list of available packages by using `list_packages()`. This will show metadata about the package, including what topics (i.e. tags) the package covers, any civic issues it addresses, a description of it, how many resources there are (and their formats), how often it is is refreshed and when it was last refreshed.
+Much of the data in the portal is private and requires an authentication token. You can get this from the portal itself, and set up using `set_token()`. Once your token is set up, subsequent functions will automatically retrieve and use the token so that you get all data available to your user.
+
+In the portal, datasets are called **packages**. You can see a list of available packages by using `list_packages()`. This will show metadata about the package, including what tags, state, license, notes, version, and number of resources.
 
 ```{r list-packages-example}
 library(lemropendata)
@@ -37,33 +39,22 @@ packages <- list_packages()
 packages
 ```
 
-You can also search packages by title:
-
-```{r search-packages-example}
-to_building_registry_package <- search_packages("Toronto Apartment Building Registry")
-
-to_building_registry_package
-```
-
 Within a package, there are a number of **resources** - e.g. CSV, XSLX, JSON, SHP files, and more. Resources are the actual "data".
 
 For a given package, you can get a list of resources using `list_package_resources()`. You can pass it the package:
 
-```{r list-marriage-license-resources}
-to_building_registry_resources <- to_building_registry_package %>%
+```{r list-to-app-layers-resources}
+to_app_layers <- packages[packages$title == "Toronto App Layers",] %>%
   list_package_resources()
 
-to_building_registry_resources
+to_app_layers
 ```
 
 Finally (and most usefully!), you can download the resource (i.e., the actual data) directly into R using `get_resource()`:
 
-```{r get-marriage-licenses}
-library(dplyr)
-
-to_building_registry_zone <- to_building_registry_resources %>%
-  filter(name == "toronto_apartment_building_registry-zone.csv") %>%
+```{r get-resource}
+to_points_layers <- to_app_layers[to_app_layers$name == "toronto_points_layers 20230719-202357.rds",] %>%
   get_resource()
 
-to_building_registry_zone
+to_points_layers
 ```
