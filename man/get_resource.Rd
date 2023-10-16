@@ -16,7 +16,7 @@ In most cases, the resource is returned as a tibble or list of tibbles.
 If it is a spatial resource (i.e. SHP or GeoJSON), it is returned as an sf object.
 }
 \description{
-Download a resource from the portal directly into your R session. CSV, XLS, XLSX, XML, JSON, SHP, ZIP, and GeoJSON resources are supported.
+Download a resource from the portal directly into your R session. CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GeoJSON, RDS, and YAML resources are supported.
 }
 \examples{
 \donttest{

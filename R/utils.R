@@ -25,7 +25,7 @@ as_id <- function(x) {
 
 check_id_in_df <- function(x, name) {
   if (!("id" %in% names(x))) {
-    stop(gle::glue('`{name}` must contain a column "id".'),
+    stop(glue::glue('`{name}` must contain a column "id".'),
       call. = FALSE
     )
   } else {

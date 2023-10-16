@@ -1,13 +1,13 @@
 Package: lemropendata
 Title: Access the LEMR Open Data Portal
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     c(person(given = "Sharla",
              family = "Gelfand",
              role = c("aut", "cre"),
              email = "sharla.gelfand@gmail.com"))
 Description: Access data from the "LEMR
-    Open Data Portal" (<https://open.toronto.ca>) directly from R.
+    Open Data Portal" directly from R.
 License: MIT + file LICENSE
 Depends: 
     R (>= 2.10)
@@ -19,7 +19,8 @@ Imports:
     tibble,
     xml2,
     curl,
-    glue
+    glue,
+    yaml
 Suggests: 
     covr,
     dplyr,
