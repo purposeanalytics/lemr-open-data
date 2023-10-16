@@ -1,6 +1,6 @@
 #' Download a resource into your R session
 #'
-#' Download a resource from the portal directly into your R session. CSV, XLS, XLSX, XML, JSON, SHP, ZIP, and GeoJSON resources are supported.
+#' Download a resource from the portal directly into your R session. CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GeoJSON, RDS, and YAML resources are supported.
 #'
 #' @param resource A way to identify the resource. Either a resource ID (passed as a character vector directly) or a single resource resulting from \code{\link{list_package_resources}}.
 #' @inheritParams list_packages
@@ -52,6 +52,16 @@ get_resource <- function(resource, token = get_token()) {
     } else {
       res
     }
+  } else if (tolower(format) == "yaml") {
+    temp <- tempfile(fileext = ".yml")
+    ckanr::ckan_fetch(
+      x = resource_res[["url"]],
+      store = "disk",
+      path = temp,
+      format = format,
+      key = token
+    )
+    yaml::read_yaml(temp)
   } else {
     res <- ckanr::ckan_fetch(
       x = resource_res[["url"]],
@@ -76,8 +86,8 @@ get_resource <- function(resource, token = get_token()) {
 
 check_format <- function(format) {
   format <- toupper(format)
-  if (!(format %in% c("CSV", "XLS", "XLSX", "XML", "JSON", "SHP", "ZIP", "GEOJSON", "RDS"))) {
-    stop(paste(format, "`format` can't be downloaded via package; please visit Open Data Portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON, RDS."),
+  if (!(format %in% c("CSV", "XLS", "XLSX", "XML", "JSON", "SHP", "ZIP", "GEOJSON", "RDS", "YAML"))) {
+    stop(paste(format, "`format` can't be downloaded via package; please visit Open Data Portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON, RDS, YAML."),
       call. = FALSE
     )
   } else {
