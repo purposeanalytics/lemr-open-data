@@ -49,6 +49,10 @@ get_resource <- function(resource, token = get_token()) {
       res %>%
         sf::st_as_sf(coords = c("Longitude", "Latitude"), remove = FALSE) %>%
         sf::st_set_crs(4326)
+    } else if (all(c("longitude", "latitude") %in% names(res))) {
+      res %>%
+        sf::st_as_sf(coords = c("longitude", "latitude"), remove = FALSE) %>%
+        sf::st_set_crs(4326)
     } else {
       res
     }
