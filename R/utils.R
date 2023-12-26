@@ -1,4 +1,4 @@
-lemr_ckan_url <- "http://20.220.163.227"
+lemr_ckan_url <- "https://data.lemr.ca/"
 
 as_id <- function(x) {
   object_name <- deparse(substitute(x))
