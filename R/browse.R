@@ -1,4 +1,4 @@
-#' Open the LEMR Open Data Portal in your browser
+#' Open the LEMR Housing Monitor open data portal in your browser
 #'
 #' @export
 #'
@@ -20,18 +20,19 @@ browse_portal <- function() {
 
 #' Open the package's page in your browser
 #'
-#' Opens a browser to the package's page on the LEMR Open Data Portal
+#' Opens a browser to the package's page on the LEMR Housing Monitor open data portal
 #'
 #' @param package A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.
+#' @param lang The language to open the portal in - "en" or "fr". Defaults to "en".
 #'
 #' @export
 #'
 #' @examples
 #' \donttest{
-#' toronto_registry <- search_packages("Toronto Apartment Building Registry")
-#' browse_package(toronto_registry)
+#' toronto_data <- search_packages("Toronto")
+#' browse_package(toronto_data)
 #' }
-browse_package <- function(package) {
+browse_package <- function(package, lang = "en") {
   check_internet()
   package_id <- as_id(package)
 
@@ -45,10 +46,10 @@ browse_package <- function(package) {
   )
   package_res <- check_found(package_res, package_id, "package")
 
-  package_title <- package_res[["title"]]
+  package_name <- package_res[["name"]]
 
-  package_title_url <- parse_package_title(package_title)
-  url <- paste0(lemr_ckan_url, "/dataset/", package_title_url)
+  package_name_url <- parse_package_title(package_name)
+  url <- paste0(lemr_ckan_url, lang, "/dataset/", package_name_url)
   if (interactive()) {
     utils::browseURL(url = url, browser = getOption("browser"))
   }
@@ -66,8 +67,8 @@ browse_package <- function(package) {
 #'
 #' @examples
 #' \donttest{
-#' toronto_registry <- search_packages("Toronto Apartment Building Registry")
-#' res <- list_package_resources(toronto_registry)
+#' toronto_data <- search_packages("Toronto")
+#' res <- list_package_resources(toronto_data)
 #' browse_resource(res[1, ])
 #' }
 browse_resource <- function(resource) {

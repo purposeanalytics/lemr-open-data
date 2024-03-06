@@ -16,7 +16,7 @@ as_id <- function(x) {
     stop(glue::glue("`{object_name}` must be a 1 row data frame or a length 1 character vector."),
       call. = FALSE
     )
-  } else if (grepl(glue::glue("{lemr_ckan_url}/dataset/"), x)) {
+  } else if (grepl(glue::glue("{lemr_ckan_url}"), x))  {
     package_id_from_url(x)
   } else {
     x
@@ -44,8 +44,8 @@ check_found <- function(res, id, name) {
 }
 
 package_id_from_url <- function(package_url, token = get_token()) {
-  if (!grepl(glue::glue("^{lemr_ckan_url}/dataset/"), package_url)) {
-    stop(glue::glue("Package URL must start with {lemr_ckan_url}/dataset/"),
+  if (!grepl(glue::glue("^{lemr_ckan_url}"), package_url)) {
+    stop(glue::glue("Package URL must start with {lemr_ckan_url}"),
       call. = FALSE
     )
   }
@@ -81,23 +81,6 @@ parse_package_title <- function(x) {
   dash <- gsub(lower, pattern = "[^[:alnum:]]", replacement = "-", x = lower) # replace all non-alphanumeric with -'s
   remove_repeated <- gsub(pattern = "(-)\\1+", replacement = "-", x = dash) # only one - in a row
   gsub(pattern = "-$", replacement = "", x = remove_repeated) # ends with -
-}
-
-check_limit <- function(limit) {
-  if (length(limit) != 1) {
-    stop("`limit` must be a length 1 positive integer vector.",
-      call. = FALSE
-    )
-  } else if (!is.numeric(limit) ||
-    !(limit %% 1 == 0) ||
-    limit <= 0 ||
-    limit == Inf) {
-    stop("`limit` must be a positive integer.",
-      call. = FALSE
-    )
-  } else {
-    limit
-  }
 }
 
 check_internet <- function() {

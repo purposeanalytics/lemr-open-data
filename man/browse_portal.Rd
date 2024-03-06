@@ -2,12 +2,12 @@
 % Please edit documentation in R/browse.R
 \name{browse_portal}
 \alias{browse_portal}
-\title{Open the LEMR Open Data Portal in your browser}
+\title{Open the LEMR Housing Monitor open data portal in your browser}
 \usage{
 browse_portal()
 }
 \description{
-Open the LEMR Open Data Portal in your browser
+Open the LEMR Housing Monitor open data portal in your browser
 }
 \examples{
 \donttest{

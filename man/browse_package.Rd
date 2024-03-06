@@ -4,17 +4,19 @@
 \alias{browse_package}
 \title{Open the package's page in your browser}
 \usage{
-browse_package(package)
+browse_package(package, lang = "en")
 }
 \arguments{
 \item{package}{A way to identify the package. Either a package ID (passed as a character vector directly), a single package resulting from \code{\link{list_packages}} or \code{\link{search_packages}}, or the package's URL from the portal.}
+
+\item{lang}{The language to open the portal in - "en" or "fr". Defaults to "en".}
 }
 \description{
-Opens a browser to the package's page on the LEMR Open Data Portal
+Opens a browser to the package's page on the LEMR Housing Monitor open data portal
 }
 \examples{
 \donttest{
-toronto_registry <- search_packages("Toronto Apartment Building Registry")
-browse_package(toronto_registry)
+toronto_data <- search_packages("Toronto")
+browse_package(toronto_data)
 }
 }

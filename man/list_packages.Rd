@@ -4,15 +4,13 @@
 \alias{list_packages}
 \title{List packages}
 \usage{
-list_packages(limit = 50, token = get_token())
+list_packages(token = get_token())
 }
 \arguments{
-\item{limit}{The maximum number of packages to return. The default is 50.}
-
 \item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
-A tibble of available packages and metadata, including \code{title}, \code{id}, \code{num_resources} (the number of resources in the package), \code{state}, \code{isopen}, \code{license_title}, \code{notes}, \code{version}, and \code{tags}.
+A tibble of available packages and metadata.
 }
 \description{
 List packages available on the portal.

@@ -12,16 +12,15 @@ list_package_resources(package, token = get_token())
 \item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
-A tibble of resources along with metadata, including \code{name},
-\code{id}, \code{format} (the format of the resource file), and
-\code{last_modified} (the date the resource was last modified).
+A tibble of resources along with metadata.
 }
 \description{
 List resources for a package on the portal.
 }
 \examples{
 \donttest{
-list_package_resources("1db34737-ffad-489d-a590-9171d500d453")
-list_package_resources("https://open.toronto.ca/dataset/ttc-subway-delay-data")
+search_packages("Greater Toronto Area / Grande région de Toronto") \%>\%
+  list_package_resources()
+list_package_resources("https://data.lemr.ca/fr/dataset/calgary")
 }
 }

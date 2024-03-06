@@ -1,33 +1,62 @@
+#' Search packages by title
+#'
+#' Search portal packages by title.
+#'
+#' @param title Title to search (case-insensitive).
+#'
+#' @export
+#'
+#' @return A tibble of matching packages along with package metadata.
+#'
+#' @examples
+#' \donttest{
+#' search_packages("Toronto")
+#' }
+search_packages <- function(title, token = get_token()) {
+
+  check_internet()
+
+  packages <- ckanr::package_search(
+    fq = paste0("title:", '"', title, '"'),
+    rows = 50,
+    url = lemr_ckan_url,
+    as = "table",
+    key = token
+  )
+
+  complete_package_res(packages[["results"]]) %>%
+    dplyr::select(dplyr::all_of(packages_cols))
+}
+
 #' List packages
 #'
 #' List packages available on the portal.
 #'
-#'
-#' @param limit The maximum number of packages to return. The default is 50.
 #' @param token An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.
 #'
 #' @export
 #'
-#' @return A tibble of available packages and metadata, including \code{title}, \code{id}, \code{num_resources} (the number of resources in the package), \code{state}, \code{isopen}, \code{license_title}, \code{notes}, \code{version}, and \code{tags}.
+#' @return A tibble of available packages and metadata.
 #'
 #' @examples
 #' \donttest{
 #' list_packages()
 #' }
-list_packages <- function(limit = 50, token = get_token()) {
+list_packages <- function(token = get_token()) {
   check_internet()
-  limit <- check_limit(limit)
 
   packages <- ckanr::package_list_current(
-    limit = limit,
+    limit = 50,
     url = lemr_ckan_url,
     as = "table",
     key = token
   )
 
   complete_package_res(packages) %>%
-    dplyr::select(id, title, number_of_resources = num_resources, description = notes)
+    dplyr::select(dplyr::all_of(packages_cols))
 }
+
+packages_cols <- c("title", "number_of_resources" = "num_resources", "description" = "notes", "id")
 
 package_res_init <- tibble::tibble(
   title = character(),

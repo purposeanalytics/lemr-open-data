@@ -14,8 +14,8 @@ Opens a browser to the resource's package page on the LEMR Open Data Portal.
 }
 \examples{
 \donttest{
-toronto_registry <- search_packages("Toronto Apartment Building Registry")
-res <- list_package_resources(toronto_registry)
+toronto_data <- search_packages("Toronto")
+res <- list_package_resources(toronto_data)
 browse_resource(res[1, ])
 }
 }
