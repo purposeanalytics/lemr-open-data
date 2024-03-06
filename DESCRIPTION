@@ -20,7 +20,8 @@ Imports:
     xml2,
     curl,
     glue,
-    yaml
+    yaml,
+    usethis
 Suggests: 
     covr,
     dplyr,
