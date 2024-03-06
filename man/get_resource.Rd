@@ -20,7 +20,7 @@ Download a resource from the portal directly into your R session. CSV, XLS, XLSX
 }
 \examples{
 \donttest{
-search_packages("Winnipeg Building Permits example layers") \%>\%
+search_packages("Toronto") \%>\%
   list_package_resources() \%>\%
   head(1) \%>\%
   get_resource()

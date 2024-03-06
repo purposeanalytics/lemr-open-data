@@ -8,6 +8,8 @@ search_packages(title, token = get_token())
 }
 \arguments{
 \item{title}{Title to search (case-insensitive).}
+
+\item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
 \value{
 A tibble of matching packages along with package metadata.

@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @return A tibble of matching packages along with package metadata.
+#' @inheritParams list_packages
 #'
 #' @examples
 #' \donttest{
@@ -74,9 +75,6 @@ package_cols <- names(package_res_init)
 
 complete_package_res <- function(res) {
   res <- res[, package_cols]
-
-  # Turn tags into a string
-  res[["tags"]] <- purrr::map_chr(res[["tags"]], ~ paste0(.x[["display_name"]], collapse = "; "))
 
   dplyr::as_tibble(res)
 }
