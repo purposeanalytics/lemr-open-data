@@ -25,7 +25,8 @@ list_packages <- function(limit = 50, token = get_token()) {
     key = token
   )
 
-  complete_package_res(packages)
+  complete_package_res(packages) %>%
+    dplyr::select(id, title, number_of_resources = num_resources, description = notes)
 }
 
 package_res_init <- tibble::tibble(
