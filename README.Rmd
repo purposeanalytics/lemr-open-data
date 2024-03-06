@@ -37,7 +37,7 @@ datasets <- list_packages()
 packages
 ```
 
-```{r list-packages-example, echo = FALSE}
+```{r list-packages-example-internal, echo = FALSE}
 library(lemropendata)
 
 datasets <- list_packages(token = NULL)
