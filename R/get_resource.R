@@ -67,12 +67,25 @@ get_resource <- function(resource, token = get_token()) {
     )
     yaml::read_yaml(temp)
   } else {
-    res <- ckanr::ckan_fetch(
-      x = resource_res[["url"]],
-      store = "session",
-      format = format,
-      key = token
-    )
+    if (tolower(format) == "csv") {
+      # Don't convert spaces in names to periods
+
+      res <- ckanr::ckan_fetch(
+        x = resource_res[["url"]],
+        store = "session",
+        format = format,
+        key = token,
+        check.names = FALSE
+      )
+    } else {
+      res <- ckanr::ckan_fetch(
+        x = resource_res[["url"]],
+        store = "session",
+        format = format,
+        key = token
+      )
+    }
+
 
     if (inherits(res, "sf")) {
       res_crs <- sf::st_crs(res)
@@ -91,7 +104,7 @@ get_resource <- function(resource, token = get_token()) {
 check_format <- function(format) {
   format <- toupper(format)
   if (!(format %in% c("CSV", "XLS", "XLSX", "XML", "JSON", "SHP", "ZIP", "GEOJSON", "RDS", "YAML"))) {
-    stop(paste(format, "`format` can't be downloaded via package; please visit Open Data Portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON, RDS, YAML."),
+    stop(paste(format, "`format` can't be downloaded via package; please visit the LEMR Housing Monitor open data portal directly to download. \n Supported `format`s are: CSV, XLS, XLSX, XML, JSON, SHP, ZIP, GEOJSON, RDS, YAML."),
       call. = FALSE
     )
   } else {
