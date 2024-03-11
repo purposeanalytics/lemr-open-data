@@ -57,7 +57,7 @@ list_packages <- function(token = get_token()) {
     dplyr::select(dplyr::all_of(packages_cols))
 }
 
-packages_cols <- c("title", "number_of_resources" = "num_resources", "description" = "notes", "id")
+packages_cols <- c("name" = "title", "number_of_resources" = "num_resources", "description" = "notes", "id")
 
 package_res_init <- tibble::tibble(
   title = character(),
@@ -74,7 +74,11 @@ package_res_init <- tibble::tibble(
 package_cols <- names(package_res_init)
 
 complete_package_res <- function(res) {
-  res <- res[, package_cols]
+  if (length(res) == 0) {
+    res <- package_res_init
+  } else {
+    res <- res[, package_cols]
+  }
 
   dplyr::as_tibble(res)
 }
