@@ -19,7 +19,7 @@ List resources for a package on the portal.
 }
 \examples{
 \donttest{
-search_packages("Greater Toronto Area / Grande région de Toronto") \%>\%
+search_packages("Greater Toronto Area / Région du Grand Toronto") \%>\%
   list_package_resources()
 list_package_resources("https://data.lemr.ca/fr/dataset/calgary")
 }
