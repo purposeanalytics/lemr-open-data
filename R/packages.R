@@ -1,8 +1,8 @@
-#' Search packages by title
+#' Search packages by name
 #'
-#' Search portal packages by title.
+#' Search portal packages by name
 #'
-#' @param title Title to search (case-insensitive).
+#' @param name Name to search (case-insensitive)
 #'
 #' @export
 #'
@@ -13,12 +13,12 @@
 #' \donttest{
 #' search_packages("Toronto")
 #' }
-search_packages <- function(title, token = get_token()) {
+search_packages <- function(name, token = get_token()) {
 
   check_internet()
 
   packages <- ckanr::package_search(
-    fq = paste0("title:", '"', title, '"'),
+    fq = paste0("title:", '"', name, '"'),
     rows = 50,
     url = lemr_ckan_url,
     as = "table",

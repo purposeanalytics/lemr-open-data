@@ -3,10 +3,10 @@
 
 # lemropendata
 
-`lemropendata` is an R interface to the [LEMR Open Data
-Portal](http://20.220.163.227). The goal of the package is to help read
-data directly into R without needing to manually download it via the
-portal.
+`lemropendata` is an R interface to the [LEMR Housing Monitor open data
+portal](https://data.lemr.ca/en/dataset). The goal of the package is to
+help read data directly into R without needing to manually download it
+via the portal.
 
 ## Installation
 
@@ -29,14 +29,14 @@ packages
 ```
 
     #> # A tibble: 6 × 4
-    #>   id                                   title     number_of_resources description
-    #>   <chr>                                <chr>                   <int> <chr>      
-    #> 1 54ec8e60-dde0-4c2f-bef1-d58f97781d28 Calgary                     1 ""         
-    #> 2 0a0c2a2a-a2f8-4f51-b998-586a6d4694b6 Greater …                   1 ""         
-    #> 3 b7e2d8fc-e234-4f49-bc7d-9a7b483aa073 Greater …                   2 "The Toron…
-    #> 4 9571faf0-b2fc-4479-9c40-1144be8bd81c Halifax                     1 ""         
-    #> 5 92088254-b20d-4c4e-b00b-9b5bf02dee40 Metro Va…                   1 ""         
-    #> 6 57028a15-51f4-47ce-9fb9-8cdaeae50d02 Winnipeg                    1 ""
+    #>   name                                     number_of_resources description id   
+    #>   <chr>                                                  <int> <chr>       <chr>
+    #> 1 Calgary                                                   10 "The Calga… 54ec…
+    #> 2 Greater Montreal Area / Région du Grand…                  10 "The Montr… 0a0c…
+    #> 3 Greater Toronto Area / Région du Grand …                  12 "The Toron… b7e2…
+    #> 4 Halifax                                                   10 "The Halif… 9571…
+    #> 5 Metro Vancouver Area / Région métropoli…                  12 "The Vanco… 9208…
+    #> 6 Winnipeg                                                  10 "The Winni… 5702…
 
 Within a package, there are a number of **resources**. Resources are the
 actual “data”. the building or base layers in the tool.
@@ -48,15 +48,25 @@ within it using `list_package_resources()`.
 library(dplyr)
 
 greater_toronto_area_data <- datasets %>%
-  filter(title == "Greater Toronto Area / Grande région de Toronto") %>%
+  filter(name == "Greater Toronto Area / Région du Grand Toronto") %>%
   list_package_resources()
 
 greater_toronto_area_data
-#> # A tibble: 2 × 4
-#>   name                                           id         format last_modified
-#>   <chr>                                          <chr>      <chr>  <date>       
-#> 1 Building layer - Greater Toronto Area          873bd802-… CSV    2024-03-04   
-#> 2 Couche de bâtiments - Grande région de Toronto e17ae14a-… CSV    2024-03-04
+#> # A tibble: 12 × 5
+#>    name                                   id    format description last_modified
+#>    <chr>                                  <chr> <chr>  <chr>       <date>       
+#>  1 Building layer                         873b… CSV    "This data… 2024-03-11   
+#>  2 Base layer - Census tract              ce65… CSV    "This data… 2024-03-11   
+#>  3 Base layer - Forward sortation area    715c… CSV    "This data… 2024-03-11   
+#>  4 Base layer - Rental Market Survey zone b49b… CSV    "This data… 2024-03-11   
+#>  5 Base layer - Municipality              3ce4… CSV    "This data… 2024-03-11   
+#>  6 Base layer - Region                    fb30… CSV    "This data… 2024-03-11   
+#>  7 Couche de bâtiments                    e17a… CSV    "Cet ensem… 2024-03-11   
+#>  8 Couche de base - Secteur de recenseme… a968… CSV    "Cet ensem… 2024-03-11   
+#>  9 Couche de base - Région de tri d'ache… 3c11… CSV    "Cet ensem… 2024-03-11   
+#> 10 Couche de base - Zone de l'enquête su… 8121… CSV    "Cet ensem… 2024-03-11   
+#> 11 Couche de base - Municipalité          10cd… CSV    "Cet ensem… 2024-03-11   
+#> 12 Couche de base - Région                9302… CSV    "Cet ensem… 2024-03-11
 ```
 
 Finally (and most usefully!), you can download the actual data directly
@@ -64,26 +74,26 @@ into R using `get_resource()`:
 
 ``` r
 greater_toronto_area_data %>%
-  filter(name == "Building layer - Greater Toronto Area") %>%
+  filter(name == "Building layer") %>%
   get_resource()
-#> # A tibble: 4,559 × 24
-#>    Address                   `Building type` `Year built` Owner or property ma…¹
-#>    <chr>                     <chr>                  <int> <chr>                 
-#>  1 1 A Elm Grove Ave, Toron… Primary market          1957 ""                    
-#>  2 1 A Vermont Ave, Toronto  Primary market          1913 ""                    
-#>  3 1 Antrim Crescent, Toron… Primary market          1970 ""                    
-#>  4 1 Arbor Dell Rd, Toronto  Non-market              1957 "Toronto Community Ho…
-#>  5 1 Ardwick Blvd, Toronto   Non-market              1967 "Toronto Community Ho…
-#>  6 1 Biggin Crt, Toronto     Primary market          1955 ""                    
-#>  7 1 Birchlea Ave, Toronto   Primary market          1955 ""                    
-#>  8 1 Briarwood Ave, Mississ… Primary market          1940 ""                    
-#>  9 1 Brimley Rd, Toronto     Primary market          1961 ""                    
-#> 10 1 Canyon Ave, Toronto     Primary market          1960 ""                    
-#> # ℹ 4,549 more rows
+#> # A tibble: 4,480 × 24
+#>    Address        Type  `Year built` Owner or property ma…¹ `Total rental units`
+#>    <chr>          <chr>        <int> <chr>                                 <int>
+#>  1 1 A Elm Grove… Prim…         1957 ""                                       12
+#>  2 1 A Vermont A… Prim…         1913 ""                                       22
+#>  3 1 Antrim Cres… Prim…         1970 ""                                      167
+#>  4 1 Arbor Dell … Non-…         1957 "Toronto Community Ho…                   16
+#>  5 1 Ardwick Blv… Non-…         1967 "Toronto Community Ho…                   18
+#>  6 1 Biggin Crt,… Prim…         1955 ""                                       48
+#>  7 1 Birchlea Av… Prim…         1955 ""                                       10
+#>  8 1 Briarwood A… Prim…         1940 ""                                        9
+#>  9 1 Brimley Rd,… Prim…         1961 ""                                       58
+#> 10 1 Canyon Ave,… Prim…         1960 ""                                      202
+#> # ℹ 4,470 more rows
 #> # ℹ abbreviated name: ¹​`Owner or property manager`
-#> # ℹ 20 more variables: `Total rental units` <int>, `Accessible units` <int>,
-#> #   `Primary market units` <int>, `Non-market units` <int>,
-#> #   `Non-market type` <chr>, `Evictions per 100 rental units` <chr>,
-#> #   `Air conditioning type` <chr>,
-#> #   `Apartment building evaluation score history` <chr>, …
+#> # ℹ 19 more variables: `Accessible units` <int>, `Primary market units` <int>,
+#> #   `Non-market units` <int>, `Non-market type` <chr>,
+#> #   `Evictions per 100 rental units` <chr>, `Air conditioning type` <chr>,
+#> #   `Apartment building evaluation score history` <chr>,
+#> #   `Evictions filed (2010-2022)` <int>, `Eviction filing types` <chr>, …
 ```

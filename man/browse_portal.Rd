@@ -4,13 +4,17 @@
 \alias{browse_portal}
 \title{Open the LEMR Housing Monitor open data portal in your browser}
 \usage{
-browse_portal()
+browse_portal(lang = "en")
+}
+\arguments{
+\item{lang}{The language to open the portal in - "en" or "fr". Defaults to "en".}
 }
 \description{
 Open the LEMR Housing Monitor open data portal in your browser
 }
 \examples{
 \donttest{
-browse_portal()
+browse_portal("en")
+browse_portal("fr")
 }
 }

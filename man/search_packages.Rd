@@ -2,12 +2,12 @@
 % Please edit documentation in R/packages.R
 \name{search_packages}
 \alias{search_packages}
-\title{Search packages by title}
+\title{Search packages by name}
 \usage{
-search_packages(title, token = get_token())
+search_packages(name, token = get_token())
 }
 \arguments{
-\item{title}{Title to search (case-insensitive).}
+\item{name}{Name to search (case-insensitive)}
 
 \item{token}{An API key or token for the open data portal. Defaults to to the value in \code{get_token}, which can be set via \code{set_token}.}
 }
@@ -15,7 +15,7 @@ search_packages(title, token = get_token())
 A tibble of matching packages along with package metadata.
 }
 \description{
-Search portal packages by title.
+Search portal packages by name
 }
 \examples{
 \donttest{

@@ -59,8 +59,8 @@ package_id_from_url <- function(package_url, token = get_token()) {
     )
   }
 
-  search_package_title[["title"]] <- parse_package_title(search_package_title[["title"]])
-  matching_package <- search_package_title[which(search_package_title[["title"]] == package_title), ]
+  search_package_title[["name"]] <- parse_package_title(search_package_title[["name"]])
+  matching_package <- search_package_title[which(search_package_title[["name"]] == package_title), ]
 
   if (nrow(matching_package) == 0) {
     stop(paste0("No package id found matching the URL '", package_url, "'."),

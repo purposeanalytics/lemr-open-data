@@ -1,21 +1,24 @@
 #' Open the LEMR Housing Monitor open data portal in your browser
 #'
+#' @inheritParams browse_package
 #' @export
 #'
 #' @examples
 #' \donttest{
-#' browse_portal()
+#' browse_portal("en")
+#' browse_portal("fr")
 #' }
-browse_portal <- function() {
+browse_portal <- function(lang = "en") {
   check_internet()
   if (interactive()) {
+    url <- glue::glue("https://data.lemr.ca/{lang}/dataset")
     utils::browseURL(
-      url = lemr_ckan_url,
+      url = url,
       browser = getOption("browser")
     )
   }
 
-  invisible(lemr_ckan_url)
+  invisible(url)
 }
 
 #' Open the package's page in your browser
