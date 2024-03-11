@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \donttest{
-#' search_packages("Greater Toronto Area / Grande région de Toronto") %>%
+#' search_packages("Greater Toronto Area / Région du Grand Toronto") %>%
 #'   list_package_resources()
 #' list_package_resources("https://data.lemr.ca/fr/dataset/calgary")
 #' }
@@ -35,11 +35,12 @@ list_package_resources <- function(package, token = get_token()) {
     tibble::tibble(
       name = character(),
       id = character(),
-      format = character()
+      format = character(),
+      description = character()
     )
   } else {
     resources <- package_res[["resources"]]
-    res <- resources[, c("name", "id", "format", "last_modified")]
+    res <- resources[, c("name", "id", "format", "description", "last_modified")]
     res[["last_modified"]] <- as.Date(res[["last_modified"]])
     tibble::as_tibble(res)
   }
